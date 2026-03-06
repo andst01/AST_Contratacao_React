@@ -5,7 +5,7 @@ import { environment } from "../config/enviroment";
 const API_APOLICE = environment.apiApolice;
 
 export class ApoliceService {
-  static async listarApoliceCliente(filtro: any): Promise<Apolice[]> {
+  static async listarComFiltro(filtro: any): Promise<Apolice[]> {
 
     const url = `${API_APOLICE}/ObterTodosComFiltro?dataContratacao=${filtro.dataContratacao}&numeroApolice=${filtro.numeroApolice}&status=${filtro.codigoStatus}`;
     

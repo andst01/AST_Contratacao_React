@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApoliceService } from "../services/ApoliceService";
-import type { Apolice } from "../models/Apolice";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { PropostaService } from "../services/PropostaService";
 import { useEffect, useState, useRef } from "react";
 import DataTable from "datatables.net-react";
 import DT from "datatables.net-dt";
@@ -14,39 +14,37 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-//import { Button as ReactButton }from "react-bootstrap/Button";
+import type { Proposta } from "../models/Proposta";
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
 DataTable.use(DT);
 
-export function ListaApolice() {
+export function ListaProposta() {
   const tableRef = useRef<any>(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [apoliceSelecionada, setApoliceSelecionada] = useState<Apolice | null>(
-    null,
-  );
+  const [propostaSelecionada, setPropostaSelecionada] =
+    useState<Proposta | null>(null);
 
-  const [apolices, setApolices] = useState<Apolice[]>([]);
+  const [propostas, setProposta] = useState<Proposta[]>([]);
 
   const [filtros, setFiltros] = useState({
-    dataContratacao: "",
-    numeroApolice: "",
+    dataCriacao: "",
+    numeroProposta: "",
     codigoStatus: "-1",
   });
 
-  const carregarApolices = () => {
-    ApoliceService.listarComFiltro(filtros)
-      .then(setApolices)
+  const carregarPropostas = () => {
+    PropostaService.listarComFiltro(filtros)
+      .then(setProposta)
       .catch((err) => console.error(err));
   };
 
   useEffect(() => {
-    carregarApolices();
+    carregarPropostas();
   }, []);
 
   useEffect(() => {
-    const table = document.querySelector("#tabela-apolice");
+    const table = document.querySelector("#tabela-proposta");
 
     const handleClick = (event: any) => {
       const target = event.target.closest("button");
@@ -64,7 +62,7 @@ export function ListaApolice() {
       }
 
       if (target.classList.contains("btn-excluir")) {
-        setApoliceSelecionada(data);
+        setPropostaSelecionada(data);
         setShowModal(true);
       }
     };
@@ -77,14 +75,14 @@ export function ListaApolice() {
   }, []);
 
   const confirmarExclusao = async () => {
-    if (!apoliceSelecionada) return;
+    if (!propostaSelecionada) return;
 
     //await ApoliceService.excluir(apoliceSelecionada.id);
 
     toast.success("Apólice excluída com sucesso!");
 
     setShowModal(false);
-    carregarApolices();
+    carregarPropostas();
   };
 
   return (
@@ -113,19 +111,20 @@ export function ListaApolice() {
           </Box>
           <Grid container spacing={2} alignItems="end" mb={2}>
             <Grid item xs={12} md={3}>
-              
               <DatePicker
-                label="Data Contratação"
+                label="Data de Criação"
                 format="DD/MM/YYYY"
                 value={
-                  filtros.dataContratacao
-                    ? dayjs(filtros.dataContratacao)
+                  filtros.dataCriacao
+                    ? dayjs(filtros.dataCriacao)
                     : dayjs()
                 }
                 onChange={(novaData) =>
                   setFiltros({
                     ...filtros,
-                    dataContratacao: novaData ? novaData.format("YYYY-MM-DD") : "",
+                    dataCriacao: novaData
+                      ? novaData.format("YYYY-DD-MM")
+                      : "",
                   })
                 }
                 slotProps={{
@@ -139,12 +138,12 @@ export function ListaApolice() {
 
             <Grid item xs={12} md={3}>
               <TextField
-                label="Número Apólice"
+                label="Número Proposta"
                 fullWidth
                 size="small"
-                value={filtros.numeroApolice}
+                value={filtros.numeroProposta}
                 onChange={(e) =>
-                  setFiltros({ ...filtros, numeroApolice: e.target.value })
+                  setFiltros({ ...filtros, numeroProposta: e.target.value })
                 }
               />
             </Grid>
@@ -168,7 +167,7 @@ export function ListaApolice() {
             </Grid>
 
             <Grid item xs={12} md={3} display="flex" gap={2}>
-              <Button variant="contained" onClick={carregarApolices} fullWidth>
+              <Button variant="contained" onClick={carregarPropostas} fullWidth>
                 Pesquisar
               </Button>
 
@@ -176,7 +175,7 @@ export function ListaApolice() {
                 variant="outlined"
                 color="success"
                 fullWidth
-                onClick={() => navigate("/apolices/nova")}
+                onClick={() => navigate("/proposta/nova")}
               >
                 Novo
               </Button>
@@ -204,16 +203,17 @@ export function ListaApolice() {
             textAlign: "left",
           }}
         >
-          <h5>Lista de Apólices</h5>
+          <h5>Lista de Proposta</h5>
           <p></p>
         </Box>
         <DataTable
-          id="tabela-apolice"
+          id="tabela-proposta"
           ref={tableRef}
-          data={apolices}
+          data={propostas}
           className="display table table-striped w-100"
           columns={[
-            { title: "Número Apólice", data: "numeroApolice" },
+            { title: "Número Proposta", data: "numeroProposta" },
+            { title: "Cliente", data: "nomeCliente" },
             {
               title: "Cobertura",
               data: "valorCobertura",
@@ -225,7 +225,7 @@ export function ListaApolice() {
             },
             {
               title: "Prêmio",
-              data: "premioFinal",
+              data: "premio",
               render: (data: number) =>
                 new Intl.NumberFormat("pt-BR", {
                   style: "currency",
@@ -233,8 +233,8 @@ export function ListaApolice() {
                 }).format(data),
             },
             {
-              title: "Data da Contratação",
-              data: "dataContratacao",
+              title: "Data de Criação",
+              data: "dataCriacao",
               render: (data: string) =>
                 new Intl.DateTimeFormat("pt-BR").format(new Date(data)),
             },
@@ -294,7 +294,7 @@ export function ListaApolice() {
         </Modal.Header>
         <Modal.Body>
           Deseja realmente excluir a apólice{" "}
-          <strong>{apoliceSelecionada?.numeroApolice}</strong>?
+          <strong>{propostaSelecionada?.numeroProposta}</strong>?
         </Modal.Body>
         <Modal.Footer>
           <Grid>

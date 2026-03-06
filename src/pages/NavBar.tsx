@@ -35,7 +35,12 @@ export default function Navbar() {
                 Seguro
               </a>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href="#">
+                <a className="dropdown-item" href="/propostas"
+                onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/propostas");
+                  }}
+                >
                   Proposta
                 </a>
                 <a
