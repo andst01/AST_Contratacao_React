@@ -3,29 +3,32 @@
 //import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Home } from './pages/Home'
+//import { Home } from './pages/Home'
 import { ListaApolice } from './pages/ListaApolice'
 import { ApoliceForm } from './pages/ApoliceForm'
 import { CssBaseline } from '@mui/material'
 import { ToastContainer } from "react-toastify";
+import Navbar from './pages/NavBar'
 
 function App() {
   //const [count, setCount] = useState(0)
 
   return (
-
+    <>
+      
       <BrowserRouter>
+      <Navbar/>
       <CssBaseline/>
       <ToastContainer />
       <Routes>
-        <Route path='/' element={<Home/>} />
+        <Route path='/' element={<ListaApolice/>} />
         <Route path='/apolices' element={<ListaApolice />} />
         <Route path="/apolices/nova" element={<ApoliceForm />} />
         <Route path="/apolices/editar/:id" element={<ApoliceForm />} />
       </Routes>
     </BrowserRouter>
    
-    
+    </>
     // #region antigo
    /* <>
       <div>

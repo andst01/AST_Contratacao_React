@@ -140,7 +140,6 @@ export function ListaApolice() {
             <Grid item xs={12} md={3}>
               <TextField
                 label="Número Apólice"
-                defaultValue={""}
                 fullWidth
                 size="small"
                 value={filtros.numeroApolice}
