@@ -123,7 +123,7 @@ export function ListaProposta() {
                   setFiltros({
                     ...filtros,
                     dataCriacao: novaData
-                      ? novaData.format("YYYY-DD-MM")
+                      ? novaData.format("YYYY-MM-DD")
                       : "",
                   })
                 }
