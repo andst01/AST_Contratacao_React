@@ -63,7 +63,7 @@ const schema = yup.object({
     .number()
     .typeError("VALOR COBERTURA inválido")
     .min(0, "VALOR inválido"),
-
+  
   premioFinal: yup
     .number()
     .typeError("PRÊMIO inválido")
