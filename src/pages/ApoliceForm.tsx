@@ -155,7 +155,7 @@ export function ApoliceForm() {
                   textAlign: "left"
                 }}
               >
-                Informações
+               <h5>Informações</h5> 
               </Box>
               <Grid container spacing={3}>
                 {!isEdit ? (
@@ -286,7 +286,7 @@ export function ApoliceForm() {
                   textAlign: "left"
                 }}
               >
-                Financeiro
+              <h5>Financeiro</h5>  
               </Box>
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
@@ -390,7 +390,7 @@ export function ApoliceForm() {
                   textAlign: "left"
                 }}
               >
-                Período
+               <h5>Período</h5> 
               </Box>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
@@ -473,7 +473,7 @@ export function ApoliceForm() {
               </Grid>
             </Box>
           </Grid>
-          <Grid item xs={12} mt={2} sx={{textAlign: "right"}}>
+          <Grid item xs={12} mt={2} sx={{textAlign: "right", marginBottom: "50px"}}>
             <Button type="submit" variant="contained">
               {isEdit ? "Atualizar" : "Salvar"}
             </Button>

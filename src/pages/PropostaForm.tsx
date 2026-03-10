@@ -77,12 +77,14 @@ const schema = yup.object({
   nomeClienteCpf: yup.string().nullable(),
 });
 
-export function ApoliceForm() {
+export function PropostaForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
+
+  const [buscaCliente, setBuscaCliente] = useState("");
 
   const {
     control,
@@ -99,12 +101,13 @@ export function ApoliceForm() {
       quantidadeParcelas: 0,
       formaPagamento: "",
       dataCriacao: "",
-      codigoStatus: 0,
+      codigoStatus: -1,
       dataValidade: "",
       idCliente: 0,
       tipoSeguro: "",
       canalVenda: "",
       nomeClienteCpf: "",
+      observacoes: "",
       /*
 
  id: number,
@@ -183,63 +186,71 @@ export function ApoliceForm() {
               >
                 <h5>Dados da Proposta</h5>
               </Box>
-            </Box>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
-                <Controller
-                  name="numeroProposta"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      label="Número Proposta"
-                      fullWidth
-                      size="small"
-                      value={field.value}
-                      error={!!errors.numeroProposta}
-                      helperText={errors.numeroProposta?.message}
-                    />
-                  )}
-                />
-              </Grid>
 
-              <Grid item xs={12} md={4}>
-                <Controller
-                  name="tipoSeguro"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      label="Tipo Seguro"
-                      fullWidth
-                      size="small"
-                      value={field.value}
-                      error={!!errors.tipoSeguro}
-                      helperText={errors.tipoSeguro?.message}
-                    />
-                  )}
-                />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={4}>
+                  <Controller
+                    name="numeroProposta"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Número Proposta"
+                        fullWidth
+                        size="small"
+                        value={field.value}
+                        InputProps={{
+                          readOnly: false,
+                        }}
+                        error={!!errors.numeroProposta}
+                        helperText={errors.numeroProposta?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                  <Controller
+                    name="tipoSeguro"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Tipo Seguro"
+                        fullWidth
+                        size="small"
+                        value={field.value}
+                        error={!!errors.tipoSeguro}
+                        helperText={errors.tipoSeguro?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Controller
+                    name="codigoStatus"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Status"
+                        select
+                        fullWidth
+                        size="small"
+                        value={field.value ?? ""}
+                        error={!!errors.codigoStatus}
+                        helperText={errors.codigoStatus?.message}
+                      >
+                        <MenuItem value={-1}>Todos</MenuItem>
+                        <MenuItem value={1}>Ativo</MenuItem>
+                        <MenuItem value={2}>Cancelado</MenuItem>
+                        <MenuItem value={3}>Expirado</MenuItem>
+                      </TextField>
+                    )}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={4}>
-                <Controller
-                  name="codigoStatus"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Status"
-                      select
-                      fullWidth
-                      size="small"
-                      value={field.value ?? ""}
-                    >
-                      <MenuItem value={-1}>Todos</MenuItem>
-                      <MenuItem value={1}>Ativo</MenuItem>
-                      <MenuItem value={2}>Cancelado</MenuItem>
-                      <MenuItem value={3}>Expirado</MenuItem>
-                    </TextField>
-                  )}
-                />
-              </Grid>
-            </Grid>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <Box
@@ -263,60 +274,61 @@ export function ApoliceForm() {
               >
                 <h5>Vigência</h5>
               </Box>
-            </Box>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="dataCriacao"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Data de Criação"
-                      format="DD/MM/YYYY"
-                      value={field.value ? dayjs(field.value) : null}
-                      onChange={(date) =>
-                        field.onChange(date ? date.toISOString() : null)
-                      }
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          size: "small",
-                          error: !!errors.dataCriacao,
-                          helperText: errors.dataCriacao?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Grid>
 
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="dataValidade"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <DatePicker
-                      label="Data de Validade"
-                      format="DD/MM/YYYY"
-                      value={field.value ? dayjs(field.value) : null}
-                      onChange={(date) =>
-                        field.onChange(date ? date.toISOString() : null)
-                      }
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          size: "small",
-                          error: !!errors.dataValidade,
-                          helperText: errors.dataValidade?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Controller
+                    name="dataCriacao"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <DatePicker
+                        label="Data de Criação"
+                        format="DD/MM/YYYY"
+                        value={field.value ? dayjs(field.value) : null}
+                        onChange={(date) =>
+                          field.onChange(date ? date.toISOString() : null)
+                        }
+                        slotProps={{
+                          textField: {
+                            fullWidth: true,
+                            size: "small",
+                            error: !!errors.dataCriacao,
+                            helperText: errors.dataCriacao?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Controller
+                    name="dataValidade"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <DatePicker
+                        label="Data de Validade"
+                        format="DD/MM/YYYY"
+                        value={field.value ? dayjs(field.value) : null}
+                        onChange={(date) =>
+                          field.onChange(date ? date.toISOString() : null)
+                        }
+                        slotProps={{
+                          textField: {
+                            fullWidth: true,
+                            size: "small",
+                            error: !!errors.dataValidade,
+                            helperText: errors.dataValidade?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <Box
@@ -340,49 +352,50 @@ export function ApoliceForm() {
               >
                 <h5>Valores</h5>
               </Box>
+
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Controller
+                    name="premio"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Prêmio"
+                        fullWidth
+                        size="small"
+                        value={MoedaUtil.formatarMoeda(field.value)}
+                        onChange={(e) =>
+                          field.onChange(MoedaUtil.parseMoeda(e.target.value))
+                        }
+                        error={!!errors.premio}
+                        helperText={errors.premio?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Controller
+                    name="valorCobertura"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Valor Cobertura"
+                        fullWidth
+                        size="small"
+                        value={MoedaUtil.formatarMoeda(field.value)}
+                        onChange={(e) =>
+                          field.onChange(MoedaUtil.parseMoeda(e.target.value))
+                        }
+                        error={!!errors.valorCobertura}
+                        helperText={errors.valorCobertura?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
             </Box>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="premio"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Prêmio"
-                      fullWidth
-                      size="small"
-                      value={MoedaUtil.formatarMoeda(field.value)}
-                      onChange={(e) =>
-                        field.onChange(MoedaUtil.parseMoeda(e.target.value))
-                      }
-                      error={!!errors.premio}
-                      helperText={errors.premio?.message}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="valorCobertura"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Valor Cobertura"
-                      fullWidth
-                      size="small"
-                      value={MoedaUtil.formatarMoeda(field.value)}
-                      onChange={(e) =>
-                        field.onChange(MoedaUtil.parseMoeda(e.target.value))
-                      }
-                      error={!!errors.valorCobertura}
-                      helperText={errors.valorCobertura?.message}
-                    />
-                  )}
-                />
-              </Grid>
-            </Grid>
           </Grid>
           <Grid item xs={12}>
             <Box
@@ -406,65 +419,66 @@ export function ApoliceForm() {
               >
                 <h5>Pagamento</h5>
               </Box>
+
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={4}>
+                  <Controller
+                    name="formaPagamento"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Forma de Pagamento"
+                        select
+                        fullWidth
+                        size="small"
+                        value={field.value ?? ""}
+                        error={!!errors.formaPagamento}
+                        helperText={errors.formaPagamento?.message}
+                      >
+                        <MenuItem value="">Selecione</MenuItem>
+                        <MenuItem value="Credito">Crédito</MenuItem>
+                        <MenuItem value="Debito">Débito</MenuItem>
+                        <MenuItem value="Boleto">Boleto</MenuItem>
+                      </TextField>
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Controller
+                    name="quantidadeParcelas"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Parcelas"
+                        type="number"
+                        fullWidth
+                        size="small"
+                        error={!!errors.quantidadeParcelas}
+                        helperText={errors.quantidadeParcelas?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Controller
+                    name="canalVenda"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Canal de Venda"
+                        fullWidth
+                        size="small"
+                        error={!!errors.canalVenda}
+                        helperText={errors.canalVenda?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
             </Box>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={3}>
-                <Controller
-                  name="formaPagamento"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Forma de Pagamento"
-                      select
-                      fullWidth
-                      size="small"
-                      value={field.value ?? ""}
-                      error={!!errors.formaPagamento}
-                      helperText={errors.formaPagamento?.message}
-                    >
-                      <MenuItem value="">Selecione</MenuItem>
-                      <MenuItem value="Credito">Crédito</MenuItem>
-                      <MenuItem value="Debito">Débito</MenuItem>
-                      <MenuItem value="Boleto">Boleto</MenuItem>
-                    </TextField>
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <Controller
-                  name="quantidadeParcelas"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Parcelas"
-                      type="number"
-                      fullWidth
-                      size="small"
-                      error={!!errors.quantidadeParcelas}
-                      helperText={errors.quantidadeParcelas?.message}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <Controller
-                  name="canalVenda"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Canal de Venda"
-                      fullWidth
-                      size="small"
-                      error={!!errors.canalVenda}
-                      helperText={errors.canalVenda?.message}
-                    />
-                  )}
-                />
-              </Grid>
-            </Grid>
           </Grid>
           <Grid item xs={12}>
             <Box
@@ -488,64 +502,72 @@ export function ApoliceForm() {
               >
                 <h5>Cliente</h5>
               </Box>
-            </Box>
-            <Grid container spacing={3}>
-              {!isEdit ? (
-                <Grid item xs={12} md={8}>
-                  <Controller
-                    name="idCliente"
-                    control={control}
-                    render={({ field }) => (
-                      <Autocomplete
-                        options={clientes}
-                        getOptionLabel={(option) => `${option.nomeCpf}`}
-                        onChange={(_, value) =>
-                          field.onChange(value?.id ?? null)
-                        }
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Cliente"
-                            size="small"
-                            fullWidth
-                            error={!!errors.idCliente}
-                            helperText={errors.idCliente?.message}
-                          />
-                        )}
-                      />
-                    )}
-                  />
-                </Grid>
-              ) : (
-                <Grid item xs={12} md={8}>
-                  <Controller
-                    name="idCliente" // <--- Verifique se o nome da chave na sua API é "clienteId" ou "id"
-                    control={control}
-                    render={({ field }) => (
-                      <input type="hidden" {...field} value={field.value} />
-                    )}
-                  />
-                  <Controller
-                    name="nomeClienteCpf"
-                    control={control}
-                    render={({ field }) => (
-                      <>
-                        <TextField
-                          label=""
-                          fullWidth
-                          size="small"
-                          value={field.value}
-                          InputProps={{
-                            readOnly: true,
+              <Grid container spacing={3}>
+                {!isEdit ? (
+                  <Grid item xs={12} md={8}>
+                    <Controller
+                      name="idCliente"
+                      control={control}
+                      render={({ field }) => (
+                        <Autocomplete
+                          //options={clientes}
+                          options={buscaCliente.length >= 3 ? clientes : []}
+                          inputValue={buscaCliente}
+                          onInputChange={(_, newInputValue) => {
+                            setBuscaCliente(newInputValue);
                           }}
+                          getOptionLabel={(option) => `${option.nomeCpf}`}
+                          value={clientes.find((c) => c.id === field.value) || null}
+                          onChange={(_, value) =>
+                            field.onChange(value?.id ?? null)
+                          }
+                          noOptionsText={buscaCliente.length < 3 ? "Digite ao menos 3 letras..." : "Nenhum cliente encontrado"}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Cliente"
+                              size="small"
+                              fullWidth
+                              error={!!errors.idCliente}
+                              helperText={errors.idCliente?.message}
+                            />
+                          )}
                         />
-                      </>
-                    )}
-                  />
-                </Grid>
-              )}
-            </Grid>
+                      )}
+                    />
+                  </Grid>
+                ) : (
+                  <Grid item xs={12} md={8}>
+                    <Controller
+                      name="idCliente" // <--- Verifique se o nome da chave na sua API é "clienteId" ou "id"
+                      control={control}
+                      render={({ field }) => (
+                        <input type="hidden" {...field} value={field.value} />
+                      )}
+                    />
+                    <Controller
+                      name="nomeClienteCpf"
+                      control={control}
+                      render={({ field }) => (
+                        <>
+                          <TextField
+                            label="Cliente"
+                            fullWidth
+                            size="small"
+                            value={field.value}
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                          />
+                        </>
+                      )}
+                    />
+                  </Grid>
+                )}
+              </Grid>
+            </Box>
           </Grid>
+
           <Grid item xs={12}>
             <Box
               component="fieldset"
@@ -568,28 +590,28 @@ export function ApoliceForm() {
               >
                 <h5>Observações</h5>
               </Box>
-            </Box>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={8}>
-                <Controller
-                  name="observacoes"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      label=""
-                      fullWidth
-                      size="small"
-                      value={field.value}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  )}
-                />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={8}>
+                  <Controller
+                    name="observacoes"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Observações"
+                        fullWidth
+                        size="small"
+                        value={field.value}
+                      />
+                    )}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
           </Grid>
-          <Grid item xs={12} mt={2} sx={{ textAlign: "right" }}>
+
+          <Grid item xs={12} mt={2} sx={{ textAlign: "right", marginBottom: "50px" }}>
+            
             <Button type="submit" variant="contained">
               {isEdit ? "Atualizar" : "Salvar"}
             </Button>
@@ -603,6 +625,7 @@ export function ApoliceForm() {
             </Button>
           </Grid>
         </form>
+       
       </LocalizationProvider>
     </Container>
   );

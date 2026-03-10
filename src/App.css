@@ -58,3 +58,9 @@ div.dropdown-menu.show{
 a.dropdown-item{
   background-color: #50b3eb,#2fa4e7 60% !important;
 }
+
+@media (min-width: 1000px) {
+  .css-6gprtd-MuiContainer-root {
+    max-width: 1000px  !important;
+  }
+}

@@ -58,7 +58,7 @@ export function ListaProposta() {
       if (!data) return;
 
       if (target.classList.contains("btn-editar")) {
-        navigate(`/apolices/editar/${data.id}`);
+        navigate(`/proposta/editar/${data.id}`);
       }
 
       if (target.classList.contains("btn-excluir")) {
@@ -117,12 +117,12 @@ export function ListaProposta() {
                 value={
                   filtros.dataCriacao
                     ? dayjs(filtros.dataCriacao)
-                    : dayjs()
+                    : null
                 }
                 onChange={(novaData) =>
                   setFiltros({
                     ...filtros,
-                    dataCriacao: novaData
+                    dataCriacao: novaData 
                       ? novaData.format("YYYY-MM-DD")
                       : "",
                   })
