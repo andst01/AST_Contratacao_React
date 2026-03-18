@@ -11,6 +11,9 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "./pages/NavBar";
 import { ListaProposta } from "./pages/ListaProposta";
 import { PropostaForm } from "./pages/PropostaForm";
+import { AcessoNegado } from "./pages/AcessoNegado";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { Callback } from "./pages/Callback";
 
 function App() {
   //const [count, setCount] = useState(0)
@@ -22,13 +25,17 @@ function App() {
         <CssBaseline />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<ListaApolice />} />
-          <Route path="/apolices" element={<ListaApolice />} />
-          <Route path="/propostas" element={<ListaProposta />} />
-          <Route path="/apolices/nova" element={<ApoliceForm />} />
-          <Route path="/apolices/editar/:id" element={<ApoliceForm />} />
-          <Route path="/proposta/nova" element={<PropostaForm />} />
-          <Route path="/proposta/editar/:id" element={<PropostaForm />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<ListaApolice />} />
+            <Route path="/apolices" element={<ListaApolice />} />
+            <Route path="/propostas" element={<ListaProposta />} />
+            <Route path="/apolices/nova" element={<ApoliceForm />} />
+            <Route path="/apolices/editar/:id" element={<ApoliceForm />} />
+            <Route path="/proposta/nova" element={<PropostaForm />} />
+            <Route path="/proposta/editar/:id" element={<PropostaForm />} />
+            <Route path="/acesso-negado" element={<AcessoNegado />} />
+            <Route path="/callback" element={<Callback /> } />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

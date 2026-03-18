@@ -1,0 +1,70 @@
+.access-denied-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.card h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-primary-acesso {
+    background: #667eea;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+    .btn-primary-acesso:hover {
+        background: #5a67d8;
+    }
+
+.btn-secondary-acesso {
+    background: transparent;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+    .btn-secondary-acesso:hover {
+        background: #667eea;
+        color: #fff;
+    }
