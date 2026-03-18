@@ -6,4 +6,6 @@ export const oidcConfig = {
   response_type: "code",
   scope: "openid profile roles api1",
   automaticSilentRenew: true,
+  loadUserInfo: true,
+
 };
