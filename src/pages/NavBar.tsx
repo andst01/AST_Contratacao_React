@@ -1,20 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
+import { AuthService } from "../services/AuthService";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-
-  console.log(auth.user?.profile)
+  console.log(auth.user?.profile);
 
   const nomeUsuario =
     auth.user?.profile?.name ||
     auth.user?.profile?.preferred_username ||
     "Usuário";
 
-  const handleLogout = () => {
-    auth.signoutRedirect();
+  const handleLogout =  () => {
+    
+    AuthService.logout();
+    
   };
 
   return (
@@ -72,7 +74,7 @@ export default function Navbar() {
             </li>
           </ul>
 
-                    {auth.isAuthenticated && (
+          {auth.isAuthenticated && (
             <ul className="navbar-nav ms-auto">
               <li className="nav-item dropdown">
                 <a
@@ -82,7 +84,7 @@ export default function Navbar() {
                 >
                   {/* Avatar */}
                   <img
-                    src="https://ui-avatars.com/api/?name=User"
+                    src={`https://ui-avatars.com/api/?name=${nomeUsuario}`}
                     alt="user"
                     width="30"
                     height="30"
@@ -93,9 +95,7 @@ export default function Navbar() {
                 </a>
 
                 <div className="dropdown-menu dropdown-menu-end">
-                  <span className="dropdown-item-text">
-                    👤 {nomeUsuario}
-                  </span>
+                  <span className="dropdown-item-text">👤 {nomeUsuario}</span>
 
                   <div className="dropdown-divider"></div>
 
@@ -109,7 +109,6 @@ export default function Navbar() {
               </li>
             </ul>
           )}
-
         </div>
       </div>
     </nav>
