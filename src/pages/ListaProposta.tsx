@@ -20,6 +20,7 @@ import {
   faSearch, 
   faPlus 
 } from '@fortawesome/free-solid-svg-icons';
+import { LoadingSpinner } from "../components/loadingSpinner";
 
 DataTable.use(DT);
 
@@ -29,6 +30,7 @@ export function ListaProposta() {
   const [showModal, setShowModal] = useState(false);
   const [propostaSelecionada, setPropostaSelecionada] =
     useState<Proposta | null>(null);
+   const [loading, setLoading] = useState(false);
 
   const [propostas, setProposta] = useState<Proposta[]>([]);
 
@@ -39,9 +41,18 @@ export function ListaProposta() {
   });
 
   const carregarPropostas = () => {
-    PropostaService.listarComFiltro(filtros)
+
+    setLoading(true)
+    try{
+       PropostaService.listarComFiltro(filtros)
       .then(setProposta)
       .catch((err) => console.error(err));
+    }finally{
+      setTimeout(() =>{
+        setLoading(false)
+      }, 1500);
+    }
+   
   };
 
   useEffect(() => {
@@ -49,6 +60,7 @@ export function ListaProposta() {
   }, []);
 
   useEffect(() => {
+    
     const table = document.querySelector("#tabela-proposta");
 
     const handleClick = (event: any) => {
@@ -92,6 +104,7 @@ export function ListaProposta() {
 
   return (
     <div className="container mt-8">
+      <LoadingSpinner isLoading={loading} />
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
         <Box
           component="fieldset"

@@ -25,6 +25,7 @@ import type { Cliente } from "../models/Cliente";
 import { ClienteService } from "../services/ClienteService";
 import { PropostaService } from "../services/PropostaService";
 import { MoedaUtil } from "../utils/MoedaUtil";
+import { LoadingSpinner } from "../components/loadingSpinner";
 
 const schema = yup.object({
   id: yup.number(),
@@ -83,8 +84,8 @@ export function PropostaForm() {
   const isEdit = Boolean(id);
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
-
   const [buscaCliente, setBuscaCliente] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -108,41 +109,31 @@ export function PropostaForm() {
       canalVenda: "",
       nomeClienteCpf: "",
       observacoes: "",
-      /*
-
- id: number,
-    numeroProposta: string,
-    tipoSeguro: string,
-    dataCriacao: string,
-    dataValidade: string | null,
-    premio: number,
-    valorCobertura: number,
-    formaPagamento: string,
-    quantidadeParcelas: number | null,
-    canalVenda: string,
-    observacoes: string | null,
-    idCliente: number,
-    nomeCliente: string | null,
-    codigoStatus: number,
-    status: string,
-    nomeClienteCpf: string | null,
-    mensagem: Mensagem | null
-
-*/
+     
     },
   });
 
-  useEffect(() => {
-    if (!isEdit) {
-      ClienteService.listar().then(setClientes);
-    } else {
-      PropostaService.obterPorId(Number(id)).then((data) => {
-    
-        (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
-          setValue(key as any, data[key] ?? ""); // gara
+  const carregarDados = (id: any) => {
+    setLoading(true);
+    try {
+      if (!isEdit) {
+        ClienteService.listar().then(setClientes);
+      } else {
+        PropostaService.obterPorId(Number(id)).then((data) => {
+          (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
+            setValue(key as any, data[key] ?? ""); // gara
+          });
         });
-      });
+      }
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500);
     }
+  };
+
+  useEffect(() => {
+    carregarDados(id);
   }, [id]);
 
   const onSubmit = async (data: any) => {
@@ -159,6 +150,7 @@ export function PropostaForm() {
 
   return (
     <Container maxWidth="md" sx={{ mt: 2 }}>
+      <LoadingSpinner isLoading={loading} />
       <Typography variant="h5" mt={4} mb={3}>
         {isEdit ? "Editar Proposta" : "Nova Proposta"}
       </Typography>
@@ -517,11 +509,17 @@ export function PropostaForm() {
                             setBuscaCliente(newInputValue);
                           }}
                           getOptionLabel={(option) => `${option.nomeCpf}`}
-                          value={clientes.find((c) => c.id === field.value) || null}
+                          value={
+                            clientes.find((c) => c.id === field.value) || null
+                          }
                           onChange={(_, value) =>
                             field.onChange(value?.id ?? null)
                           }
-                          noOptionsText={buscaCliente.length < 3 ? "Digite ao menos 3 letras..." : "Nenhum cliente encontrado"}
+                          noOptionsText={
+                            buscaCliente.length < 3
+                              ? "Digite ao menos 3 letras..."
+                              : "Nenhum cliente encontrado"
+                          }
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -610,8 +608,12 @@ export function PropostaForm() {
             </Box>
           </Grid>
 
-          <Grid item xs={12} mt={2} sx={{ textAlign: "right", marginBottom: "50px" }}>
-            
+          <Grid
+            item
+            xs={12}
+            mt={2}
+            sx={{ textAlign: "right", marginBottom: "50px" }}
+          >
             <Button type="submit" variant="contained">
               {isEdit ? "Atualizar" : "Salvar"}
             </Button>
@@ -625,7 +627,6 @@ export function PropostaForm() {
             </Button>
           </Grid>
         </form>
-       
       </LocalizationProvider>
     </Container>
   );
