@@ -95,7 +95,7 @@ export default function Navbar() {
                 </a>
 
                 <div className="dropdown-menu dropdown-menu-end">
-                  <span className="dropdown-item-text">👤 {nomeUsuario}</span>
+                  <span className="dropdown-item-text"><i className="fas fa-user"></i> {nomeUsuario}</span>
 
                   <div className="dropdown-divider"></div>
 
@@ -103,7 +103,7 @@ export default function Navbar() {
                     className="dropdown-item text-danger"
                     onClick={handleLogout}
                   >
-                    🚪 Logout
+                    <i className="fas fa-sign-out-alt"></i> Logout
                   </button>
                 </div>
               </li>
