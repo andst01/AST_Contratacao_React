@@ -108,7 +108,7 @@ export function ApoliceForm() {
       PropostaService.listar().then(setPropostas);
     } else {
       ApoliceService.obterPorId(Number(id)).then((data) => {
-        console.log(data);
+       
         (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
           setValue(key as any, data[key] ?? ""); // gara
         });

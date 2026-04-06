@@ -137,7 +137,7 @@ export function PropostaForm() {
       ClienteService.listar().then(setClientes);
     } else {
       PropostaService.obterPorId(Number(id)).then((data) => {
-        console.log(data);
+    
         (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
           setValue(key as any, data[key] ?? ""); // gara
         });

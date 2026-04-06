@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Apolice } from "../models/Apolice";
 import { environment } from "../config/enviroment";
+import { BaseService } from "./BaseService";
 
 const API_APOLICE = environment.apiApolice;
 
-export class ApoliceService {
+export class ApoliceService extends BaseService {
   static async listarComFiltro(filtro: any): Promise<Apolice[]> {
 
     const url = `${API_APOLICE}/ObterTodosComFiltro?dataContratacao=${filtro.dataContratacao}&numeroApolice=${filtro.numeroApolice}&status=${filtro.codigoStatus}`;
-    
+
+    return this.request<Apolice[]>(url);
+    /*
     const response = await fetch(url, {
        method: 'GET',
        headers: { "Content-Type": "application/json" },
@@ -18,7 +21,12 @@ export class ApoliceService {
       throw new Error("Erro ao buscar apólices");
     }
 
+
+
     return response.json();
+    */
+
+    
   }
 
   static async obterPorId(id: number): Promise<Apolice> {

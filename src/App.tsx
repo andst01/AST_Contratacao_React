@@ -25,6 +25,7 @@ function App() {
         <CssBaseline />
         <ToastContainer />
         <Routes>
+          <Route path="/callback" element={<Callback /> } />
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<ListaApolice />} />
             <Route path="/apolices" element={<ListaApolice />} />
@@ -34,7 +35,6 @@ function App() {
             <Route path="/proposta/nova" element={<PropostaForm />} />
             <Route path="/proposta/editar/:id" element={<PropostaForm />} />
             <Route path="/acesso-negado" element={<AcessoNegado />} />
-            <Route path="/callback" element={<Callback /> } />
           </Route>
         </Routes>
       </BrowserRouter>
