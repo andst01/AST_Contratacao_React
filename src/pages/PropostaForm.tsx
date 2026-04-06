@@ -109,7 +109,6 @@ export function PropostaForm() {
       canalVenda: "",
       nomeClienteCpf: "",
       observacoes: "",
-     
     },
   });
 
@@ -234,9 +233,11 @@ export function PropostaForm() {
                         helperText={errors.codigoStatus?.message}
                       >
                         <MenuItem value={-1}>Todos</MenuItem>
-                        <MenuItem value={1}>Ativo</MenuItem>
-                        <MenuItem value={2}>Cancelado</MenuItem>
-                        <MenuItem value={3}>Expirado</MenuItem>
+                        <MenuItem value={0}>Criada</MenuItem>
+                        <MenuItem value={1}>Em Análise</MenuItem>
+                        <MenuItem value={2}>Aprovada</MenuItem>
+                        <MenuItem value={3}>Recusada</MenuItem>
+                        <MenuItem value={4}>Suspensa</MenuItem>
                       </TextField>
                     )}
                   />

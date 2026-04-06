@@ -60,7 +60,7 @@ export function ListaProposta() {
   }, []);
 
   useEffect(() => {
-    
+
     const table = document.querySelector("#tabela-proposta");
 
     const handleClick = (event: any) => {
@@ -178,9 +178,11 @@ export function ListaProposta() {
                 }
               >
                 <MenuItem value={-1}>Todos</MenuItem>
-                <MenuItem value={1}>Ativo</MenuItem>
-                <MenuItem value={2}>Cancelado</MenuItem>
-                <MenuItem value={3}>Expirado</MenuItem>
+                <MenuItem value={0}>Criada</MenuItem>
+                <MenuItem value={1}>Em Análise</MenuItem>
+                <MenuItem value={2}>Aprovada</MenuItem>
+                <MenuItem value={3}>Recusada</MenuItem>
+                <MenuItem value={4}>Suspensa</MenuItem>
               </TextField>
             </Grid>
 
