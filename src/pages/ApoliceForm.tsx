@@ -32,7 +32,8 @@ const schema = yup.object({
   idProposta: yup.number().required("PROPOSTA é obrigatorio"),
   numeroApolice: yup.string().required("APÓLICE é obrigatório"),
   codigoStatus: yup.number().required("STATUS é obrigatório"),
-  dataInicioVigencia: yup.string()
+  dataInicioVigencia: yup
+    .string()
     .required("DATA VIGENCIA é obrigatório")
     .test(
       "inicio-menor-que-fim",
@@ -43,9 +44,10 @@ const schema = yup.object({
         if (!value || !dataFimVigencia) return true;
 
         return new Date(value) < new Date(dataFimVigencia);
-      }
+      },
     ),
-  dataFimVigencia: yup.string()
+  dataFimVigencia: yup
+    .string()
     .nullable()
     .test(
       "fim-maior-que-inicio",
@@ -56,14 +58,14 @@ const schema = yup.object({
         if (!value) return true; // pode ser nula
 
         return new Date(value) > new Date(dataInicioVigencia);
-      }
+      },
     ),
   formaPagamento: yup.string().required("FORMA DE PAGAMENTO é obrigatório"),
   valorCobertura: yup
     .number()
     .typeError("VALOR COBERTURA inválido")
     .min(0, "VALOR inválido"),
-  
+
   premioFinal: yup
     .number()
     .typeError("PRÊMIO inválido")
@@ -108,7 +110,6 @@ export function ApoliceForm() {
       PropostaService.listar().then(setPropostas);
     } else {
       ApoliceService.obterPorId(Number(id)).then((data) => {
-       
         (Object.keys(data) as (keyof typeof data)[]).forEach((key) => {
           setValue(key as any, data[key] ?? ""); // gara
         });
@@ -152,10 +153,10 @@ export function ApoliceForm() {
                   px: 1,
                   fontWeight: 600,
                   fontSize: "0.9rem",
-                  textAlign: "left"
+                  textAlign: "left",
                 }}
               >
-               <h5>Informações</h5> 
+                <h5>Informações</h5>
               </Box>
               <Grid container spacing={3}>
                 {!isEdit ? (
@@ -256,10 +257,11 @@ export function ApoliceForm() {
                         size="small"
                         value={field.value ?? ""}
                       >
-                        <MenuItem value="0">Ativa</MenuItem>
-                        <MenuItem value="1">Cancelada</MenuItem>
-                        <MenuItem value="2">Suspensa</MenuItem>
-                        <MenuItem value="3">Encerrada</MenuItem>
+                        <MenuItem value={-1}>Todos</MenuItem>
+                        <MenuItem value={0}>Ativa</MenuItem>
+                        <MenuItem value={1}>Cancelada</MenuItem>
+                        <MenuItem value={2}>Suspensa</MenuItem>
+                        <MenuItem value={3}>Encerrada</MenuItem>
                       </TextField>
                     )}
                   />
@@ -277,17 +279,17 @@ export function ApoliceForm() {
               marginBottom: "20px",
             }}
           >
-           <Box
-                component="legend"
-                sx={{
-                  px: 1,
-                  fontWeight: 600,
-                  fontSize: "0.9rem",
-                  textAlign: "left"
-                }}
-              >
-              <h5>Financeiro</h5>  
-              </Box>
+            <Box
+              component="legend"
+              sx={{
+                px: 1,
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                textAlign: "left",
+              }}
+            >
+              <h5>Financeiro</h5>
+            </Box>
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 <Controller
@@ -381,16 +383,16 @@ export function ApoliceForm() {
                 marginBottom: "20px",
               }}
             >
-               <Box
+              <Box
                 component="legend"
                 sx={{
                   px: 1,
                   fontWeight: 600,
                   fontSize: "0.9rem",
-                  textAlign: "left"
+                  textAlign: "left",
                 }}
               >
-               <h5>Período</h5> 
+                <h5>Período</h5>
               </Box>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
@@ -473,7 +475,12 @@ export function ApoliceForm() {
               </Grid>
             </Box>
           </Grid>
-          <Grid item xs={12} mt={2} sx={{textAlign: "right", marginBottom: "50px"}}>
+          <Grid
+            item
+            xs={12}
+            mt={2}
+            sx={{ textAlign: "right", marginBottom: "50px" }}
+          >
             <Button type="submit" variant="contained">
               {isEdit ? "Atualizar" : "Salvar"}
             </Button>

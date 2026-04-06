@@ -15,6 +15,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import type { Proposta } from "../models/Proposta";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faSearch, 
+  faPlus 
+} from '@fortawesome/free-solid-svg-icons';
 
 DataTable.use(DT);
 
@@ -167,7 +172,11 @@ export function ListaProposta() {
             </Grid>
 
             <Grid item xs={12} md={3} display="flex" gap={2}>
-              <Button variant="contained" onClick={carregarPropostas} fullWidth>
+              <Button variant="contained" onClick={carregarPropostas} 
+              sx={{fontSize: "12px", textTransform: 'none'}}
+              fullWidth>
+                <FontAwesomeIcon icon={faSearch} />
+                 
                 Pesquisar
               </Button>
 
@@ -175,8 +184,10 @@ export function ListaProposta() {
                 variant="outlined"
                 color="success"
                 fullWidth
+                sx={{fontSize: "12px", textTransform: 'none'}}
                 onClick={() => navigate("/proposta/nova")}
               >
+                <FontAwesomeIcon icon={faPlus} />
                 Novo
               </Button>
             </Grid>
@@ -248,12 +259,12 @@ export function ListaProposta() {
                 const isAtivo = row.codigoStatus === 0;
 
                 return `<div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-primary btn-editar">
-                                        ✏️
+                                    <button class="btn btn-sm btn-primary btn-editar" title="Editar">
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger btn-excluir"
+                                    <button class="btn btn-sm btn-danger btn-excluir" title="Excluir"
                                      ${isAtivo ? "disabled title='Só é possível excluir quando Ativo'" : ""}>
-                                        🗑️
+                                         <i class="fas fa-trash"></i>
                                     </button>
                                     </div>
                                 `;

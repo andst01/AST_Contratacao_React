@@ -1,23 +1,13 @@
 import { environment } from "../config/enviroment";
 import type { Cliente } from "../models/Cliente";
+import { BaseService } from "./BaseService";
 
 const API_CLIENTE = environment.apiCliente;
 
-export class ClienteService {
+export class ClienteService extends BaseService {
+
   static async listar(): Promise<Cliente[]> {
-
-    const url = `${API_CLIENTE}/ObterTodos`;
-
-    const response = await fetch(url, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (!response.ok) {
-      throw new Error("Erro ao buscar apólices");
-    }
-
-    return response.json();
+    return this.request<Cliente[]>(`${API_CLIENTE}/ObterTodos`);
   }
   
 }

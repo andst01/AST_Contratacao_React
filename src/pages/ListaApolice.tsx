@@ -14,6 +14,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faSearch, 
+  faPlus 
+} from '@fortawesome/free-solid-svg-icons';
 //import { Button as ReactButton }from "react-bootstrap/Button";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -117,6 +122,7 @@ export function ListaApolice() {
               <DatePicker
                 label="Data Contratação"
                 format="DD/MM/YYYY"
+                 sx={{fontSize: "13px", textTransform: 'none'}}
                 value={
                   filtros.dataContratacao
                     ? dayjs(filtros.dataContratacao)
@@ -142,6 +148,7 @@ export function ListaApolice() {
                 label="Número Apólice"
                 fullWidth
                 size="small"
+                 sx={{fontSize: "13px", textTransform: 'none'}}
                 value={filtros.numeroApolice}
                 onChange={(e) =>
                   setFiltros({ ...filtros, numeroApolice: e.target.value })
@@ -161,14 +168,19 @@ export function ListaApolice() {
                 }
               >
                 <MenuItem value={-1}>Todos</MenuItem>
-                <MenuItem value={1}>Ativo</MenuItem>
-                <MenuItem value={2}>Cancelado</MenuItem>
-                <MenuItem value={3}>Expirado</MenuItem>
+                <MenuItem value={0}>Ativa</MenuItem>
+                <MenuItem value={1}>Cancelada</MenuItem>
+                <MenuItem value={2}>Suspensa</MenuItem>
+                <MenuItem value={3}>Encerrada</MenuItem>
               </TextField>
             </Grid>
 
             <Grid item xs={12} md={3} display="flex" gap={2}>
-              <Button variant="contained" onClick={carregarApolices} fullWidth>
+              <Button variant="contained"
+               onClick={carregarApolices} 
+              fullWidth
+               sx={{fontSize: "13px", textTransform: 'none'}}>
+                <FontAwesomeIcon icon={faSearch} />
                 Pesquisar
               </Button>
 
@@ -176,8 +188,10 @@ export function ListaApolice() {
                 variant="outlined"
                 color="success"
                 fullWidth
+                 sx={{fontSize: "13px", textTransform: 'none'}}
                 onClick={() => navigate("/apolices/nova")}
               >
+                <FontAwesomeIcon icon={faPlus} />
                 Novo
               </Button>
             </Grid>
@@ -248,12 +262,12 @@ export function ListaApolice() {
                 const isAtivo = row.codigoStatus === 0;
 
                 return `<div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-primary btn-editar">
-                                        ✏️
+                                    <button class="btn btn-sm btn-primary btn-editar" title="Editar">
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger btn-excluir"
+                                    <button class="btn btn-sm btn-danger btn-excluir" title="Excluir"
                                      ${isAtivo ? "disabled title='Só é possível excluir quando Ativo'" : ""}>
-                                        🗑️
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                     </div>
                                 `;
