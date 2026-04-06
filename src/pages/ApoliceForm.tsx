@@ -26,6 +26,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import { LoadingSpinner } from "../components/loadingSpinner";
 
 const schema = yup.object({
   id: yup.number(),
@@ -81,6 +82,7 @@ export function ApoliceForm() {
   const isEdit = Boolean(id);
 
   const [propostas, setPropostas] = useState<Proposta[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -105,7 +107,9 @@ export function ApoliceForm() {
     },
   });
 
-  useEffect(() => {
+  const carregarDados = (id: any) => {
+    setLoading(true)
+    try{
     if (!isEdit) {
       PropostaService.listar().then(setPropostas);
     } else {
@@ -115,6 +119,14 @@ export function ApoliceForm() {
         });
       });
     }
+  }finally{
+    setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+  }
+  };
+  useEffect(() => {
+    carregarDados(id)
   }, [id]);
 
   const onSubmit = async (data: any) => {
@@ -130,7 +142,9 @@ export function ApoliceForm() {
   };
 
   return (
+      
     <Container maxWidth="md" sx={{ mt: 2 }}>
+      <LoadingSpinner isLoading={loading} />
       <Typography variant="h5" mt={4} mb={3}>
         {isEdit ? "Editar Apólice" : "Nova Apólice"}
       </Typography>

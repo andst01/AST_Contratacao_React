@@ -19,6 +19,7 @@ import {
   faSearch, 
   faPlus 
 } from '@fortawesome/free-solid-svg-icons';
+import { LoadingSpinner } from "../components/loadingSpinner";
 //import { Button as ReactButton }from "react-bootstrap/Button";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -33,6 +34,7 @@ export function ListaApolice() {
   );
 
   const [apolices, setApolices] = useState<Apolice[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const [filtros, setFiltros] = useState({
     dataContratacao: "",
@@ -41,9 +43,16 @@ export function ListaApolice() {
   });
 
   const carregarApolices = () => {
-    ApoliceService.listarComFiltro(filtros)
+    setLoading(true);
+    try{
+      ApoliceService.listarComFiltro(filtros)
       .then(setApolices)
       .catch((err) => console.error(err));
+    }finally{
+      setTimeout(() =>{ setLoading(false)}, 1500)
+     
+    }
+    
   };
 
   useEffect(() => {
@@ -94,6 +103,7 @@ export function ListaApolice() {
 
   return (
     <div className="container mt-8">
+      <LoadingSpinner isLoading={loading} />
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
         <Box
           component="fieldset"
